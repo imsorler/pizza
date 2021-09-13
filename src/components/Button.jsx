@@ -6,7 +6,7 @@ const Button = ({ onClick, className, children, outline }) => {
     <button
       onClick={onClick}
       className={cn('button', className, {
-        'button-outline': outline,
+        'button--outline': outline,
       })}>
       {children}
     </button>
