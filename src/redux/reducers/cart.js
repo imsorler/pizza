@@ -24,13 +24,44 @@ const cart = (state = initialState, action) => {
       const items = Object.values(newItems).map((obj) => obj.items);
 
       const allPizzas = [].concat.apply([], items);
-      const allPizzasPrice = getTotalPrice(allPizzas);
+      const totalPrice = getTotalPrice(allPizzas);
 
       return {
         ...state,
         items: newItems,
         totalCount: allPizzas.length,
-        totalPrice: allPizzasPrice,
+        totalPrice,
+      };
+    }
+
+    case 'MINUS_CART_ITEM': {
+      const oldItems = state.items[action.payload].items;
+      const newItems = oldItems.length > 1 ? state.items[action.payload].items.slice(1) : oldItems;
+
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [action.payload]: {
+            items: newItems,
+            totalPrice: getTotalPrice(newItems),
+          },
+        },
+      };
+    }
+
+    case 'PLUS_CART_ITEM': {
+      const newItems = [...state.items[action.payload].items, state.items[action.payload].items[0]];
+
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [action.payload]: {
+            items: newItems,
+            totalPrice: getTotalPrice(newItems),
+          },
+        },
       };
     }
 
